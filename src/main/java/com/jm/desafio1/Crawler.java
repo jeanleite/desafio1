@@ -64,21 +64,21 @@ public class Crawler {
     public List<Produto> findProduct(String url) throws Exception {
         List<Produto> listProduto = new ArrayList<>();
         // Acessa o mapa do site
-        Document doc = Jsoup.parse(getPage(fixeUrl(url, "/mapa-do-site")));
+        Document doc = Jsoup.parse(getPage(fixUrl(url, "/mapa-do-site")));
         Element element = doc.getElementById("content-middle");
         Elements links = element.getElementsByTag("a");
         //Percorre as categiorias
         for (Element linkMenu : links) {
             String linkHref = linkMenu.attr("href");
             if (!linkHref.isEmpty() || !linkHref.equals("#")) {
-                String page = getPage(fixeUrl(url, linkHref));
+                String page = getPage(fixUrl(url, linkHref));
                 if (page != null) {
                     Document docCategoria = Jsoup.parse(page);
                     String categoria = docCategoria.select("h1.category-title").isEmpty() ? null : docCategoria.select("h1.category-title").first().text();
                     Elements elements = docCategoria.select("div.product-grid-item");
                     if (!elements.isEmpty()) {
                         for (Element cardProduto : elements.subList(0, elements.size() > limitPorCategoria ? limitPorCategoria : elements.size())) {
-                            String link = cardProduto.select("a.card-product-url").isEmpty() ? null : fixeUrl(url, cardProduto.select("a.card-product-url").first().attr("href"));
+                            String link = cardProduto.select("a.card-product-url").isEmpty() ? null : fixUrl(url, cardProduto.select("a.card-product-url").first().attr("href"));
                             String nome = cardProduto.select("h1.card-product-name").isEmpty() ? null : cardProduto.select("h1.card-product-name").first().text();
                             String desconto = cardProduto.select("span.label-discount-rate").isEmpty() ? null : cardProduto.select("span.label-discount-rate").first().text();
                             String preco = cardProduto.select("div.card-product-price").isEmpty() ? null : cardProduto.select("div.card-product-price").first().text();
@@ -103,7 +103,7 @@ public class Crawler {
         return listProduto;
     }
 
-    public String fixeUrl(String url, String link) {
+    public String fixUrl(String url, String link) {
         return link.startsWith(url) ? link : url.concat(link);
     }
 
