@@ -26,8 +26,10 @@ public class Crawler {
 
     private final DefaultHttpClient client = new DefaultHttpClient();
 
+    // Para ter uma variedade de produtos
     private final int limitPorCategoria = 10;
 
+    // Para não demorar muito
     private final int limitMaxProd = 1000;
 
     public String getPage(String url) {
